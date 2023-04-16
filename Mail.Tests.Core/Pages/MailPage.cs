@@ -13,6 +13,8 @@ namespace Mail.Tests.Core.Pages
         private readonly By _sendBy = By.XPath("//button[@aria-label='Send']");
         private readonly By _sentItemsBy = By.XPath("//div[@title='Sent Items']");
         private readonly By _draftsBy = By.XPath("//div[@title='Drafts']");
+        private readonly By _moreOptionsBy = By.XPath("//button[@aria-label='More options']");
+        private readonly By _saveDraftBy = By.Name("Save draft");
 
         public MailPage(WebDriver webDriver)
         {
@@ -75,6 +77,16 @@ namespace Mail.Tests.Core.Pages
         public void OpenDrafts()
         {
             _webDriver.FindElement(_draftsBy).Click();
+        }
+
+        public void OpenMoreOptions()
+        {
+            _webDriver.FindElement(_moreOptionsBy).Click();
+        }
+
+        public void SaveDraft()
+        {
+            _webDriver.FindElement(_saveDraftBy).Click();
         }
     }
 }

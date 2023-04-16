@@ -29,5 +29,24 @@ namespace Mail.Tests.Business
 
             return _mailPage.MessageExists(sentMessage.Subject);
         }
+
+        public void CreateDraft(Message messageToDraft)
+        {
+            _mailPage.OpenNewMail();
+
+            _mailPage.SetTo(messageToDraft.To);
+            _mailPage.SetSubject(messageToDraft.Subject);
+            _mailPage.SetContent(messageToDraft.Content);
+
+            _mailPage.OpenMoreOptions();
+            _mailPage.SaveDraft();
+        }
+
+        public bool IsDraftCreated(Message draftMessage)
+        {
+            _mailPage.OpenDrafts();
+
+            return _mailPage.MessageExists(draftMessage.Subject);
+        }
     }
 }

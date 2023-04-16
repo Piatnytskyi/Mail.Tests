@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Mail.Tests
 {
-    public class SendNewMessageTests : IDisposable
+    public class CreateDraftTests : IDisposable
     {
         private readonly WebDriver _webDriver;
         private readonly IConfiguration _configuration;
 
-        public SendNewMessageTests()
+        public CreateDraftTests()
         {
             _configuration = TestConfigHelper.GetConfiguration();
             WebDriverOptions webDriverOptions = _configuration.GetSection(nameof(WebDriverOptions)).Get<WebDriverOptions>()!;
@@ -32,7 +32,7 @@ namespace Mail.Tests
             _webDriver.Quit();
         }
 
-        public static IEnumerable<object[]> SendNewMessage_TestCases()
+        public static IEnumerable<object[]> CreateDraft_TestCases()
         {
             yield return new object[]
             {
@@ -45,8 +45,8 @@ namespace Mail.Tests
         }
 
         [Theory]
-        [MemberData(nameof(SendNewMessage_TestCases))]
-        public void SendNewMessage(Message message)
+        [MemberData(nameof(CreateDraft_TestCases))]
+        public void CreateDraft(Message message)
         {
             _webDriver.Navigate().GoToUrl(_configuration["BaseUrl"]);
 
@@ -68,10 +68,10 @@ namespace Mail.Tests
             var mail = new Business.Mail(mailPage);
 
             //Act
-            mail.Send(message);
+            mail.CreateDraft(message);
 
             //Assert
-            Assert.True(mail.IsMessageSent(message));
+            Assert.True(mail.IsDraftCreated(message));
         }
     }
 }
