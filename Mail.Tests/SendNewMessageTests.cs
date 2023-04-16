@@ -35,11 +35,11 @@ namespace Mail.Tests
         {
             yield return new object[]
             {
-                new Message() { To = "whatever@mailinator.com", Subject = "Test1", Content = "Hello World!" }
+                new Message() { To = "whatever@mailinator.com", Subject = "Test 1 " + Guid.NewGuid(), Content = "Hello World!" }
             };
             yield return new object[]
             {
-                new Message() { To = "whatever@mailinator.com", Subject = "Test2", Content = "Hello World!" }
+                new Message() { To = "whatever@mailinator.com", Subject = "Test 2 " + Guid.NewGuid(), Content = "Hello World!" }
             };
         }
 
@@ -70,7 +70,7 @@ namespace Mail.Tests
             mail.Send(message);
 
             //Assert
-            Assert.Equal("https://outlook.live.com/mail/0/", _configuration["BaseUrl"]);
+            Assert.True(mail.IsMessageSent(message));
         }
     }
 }

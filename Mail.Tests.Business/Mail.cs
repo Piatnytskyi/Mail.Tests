@@ -22,5 +22,12 @@ namespace Mail.Tests.Business
 
             _mailPage.ConfirmSend();
         }
+
+        public bool IsMessageSent(Message sentMessage)
+        {
+            _mailPage.OpenSentItems();
+
+            return _mailPage.MessageExists(sentMessage.Subject);
+        }
     }
 }
