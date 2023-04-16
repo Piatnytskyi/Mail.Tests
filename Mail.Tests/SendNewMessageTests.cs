@@ -6,7 +6,6 @@ using Mapster;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Interactions;
 using Xunit;
 
 namespace Mail.Tests
@@ -32,12 +31,22 @@ namespace Mail.Tests
             _webDriver.Quit();
         }
 
-        [Fact]
-        public void SendNewMessage()
+        public static IEnumerable<object[]> SendNewMessage_TestCases()
         {
-            //Arrange
-            Message message = new Message() { To = "v.v.piatnytskyi@gmail.com", Subject = "Test", Content = "Test" };
+            yield return new object[]
+            {
+                new Message() { To = "whatever@mailinator.com", Subject = "Test1", Content = "Hello World!" }
+            };
+            yield return new object[]
+            {
+                new Message() { To = "whatever@mailinator.com", Subject = "Test2", Content = "Hello World!" }
+            };
+        }
 
+        [Theory]
+        [MemberData(nameof(SendNewMessage_TestCases))]
+        public void SendNewMessage(Message message)
+        {
             _webDriver.Navigate().GoToUrl(_configuration["BaseUrl"]);
 
             var home = new Home(new HomePage(_webDriver));
@@ -55,7 +64,6 @@ namespace Mail.Tests
             {
                 mailPage = new MailPage(_webDriver);
             }
-
             var mail = new Business.Mail(mailPage);
 
             //Act
