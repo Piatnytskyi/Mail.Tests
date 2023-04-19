@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Mail.Tests
 {
-    public class SendNewMessageTests : IDisposable
+    public class CreateDraftTests : IDisposable
     {
         private readonly WebDriver _webDriver;
         private readonly IConfiguration _configuration;
 
-        public SendNewMessageTests()
+        public CreateDraftTests()
         {
             _configuration = TestConfigHelper.GetConfiguration();
             WebDriverOptions webDriverOptions = _configuration.GetSection(nameof(WebDriverOptions)).Get<WebDriverOptions>()!;
@@ -32,7 +32,7 @@ namespace Mail.Tests
             _webDriver.Quit();
         }
 
-        public static IEnumerable<object[]> SendNewMessage_TestCases()
+        public static IEnumerable<object[]> CreateDraft_TestCases()
         {
             yield return new object[]
             {
@@ -45,8 +45,8 @@ namespace Mail.Tests
         }
 
         [Theory]
-        [MemberData(nameof(SendNewMessage_TestCases))]
-        public void SendNewMessage(Message message)
+        [MemberData(nameof(CreateDraft_TestCases))]
+        public void CreateDraft(Message message)
         {
             _webDriver.Navigate().GoToUrl(_configuration["BaseUrl"]);
 
@@ -68,59 +68,10 @@ namespace Mail.Tests
             var mail = new Business.Mail(mailPage);
 
             //Act
-            mail.Send(message);
+            mail.CreateDraft(message);
 
             //Assert
-            Assert.True(mail.IsMessageInFolder("Sent Items", message));
-        }
-
-        public static IEnumerable<object[]> SendNewMessage_Invalid_TestCases()
-        {
-            yield return new object[]
-            {
-                new Message() { To = "invalid", Subject = "Test 1 " + Guid.NewGuid(), Content = "Hello World!" }
-            };
-            yield return new object[]
-            {
-                new Message() { To = "invalid", Subject = "Test 2 " + Guid.NewGuid(), Content = "Hello World!" }
-            };
-        }
-
-        [Theory]
-        [MemberData(nameof(SendNewMessage_Invalid_TestCases))]
-        public void SendNewMessage_Invalid(Message message)
-        {
-            _webDriver.Navigate().GoToUrl(_configuration["BaseUrl"]);
-
-            var home = new Home(new HomePage(_webDriver));
-            MailPage mailPage;
-            SignInPage? signInPage = home.StartSignIn();
-            if (signInPage is not null)
-            {
-                var signIn = new SignIn(signInPage);
-                UserOptions userOptions = _configuration.GetSection(nameof(UserOptions)).Get<UserOptions>()!;
-                var user = userOptions.Adapt<User>();
-
-                mailPage = signIn.Login(user);
-            }
-            else
-            {
-                mailPage = new MailPage(_webDriver);
-            }
-            var mail = new Business.Mail(mailPage);
-
-            //Act
-            bool isSend = mail.Send(message);
-
-            //Assert
-            Assert.False(isSend);
-
-            _webDriver.Navigate().Refresh();
-            _webDriver.SwitchTo().Alert().Accept();
-            message.To = "whatever@mailinator.com";
-            mail.Send(message);
-
-            Assert.True(mail.IsMessageInFolder("Sent Items", message));
+            Assert.True(mail.IsMessageInFolder("Drafts", message));
         }
     }
 }
