@@ -12,7 +12,7 @@ namespace Mail.Tests.Business
             _mailPage = mailPage;
         }
 
-        public void Send(Message messageToSend)
+        public bool Send(Message messageToSend)
         {
             _mailPage.OpenNewMail();
 
@@ -21,6 +21,12 @@ namespace Mail.Tests.Business
             _mailPage.SetContent(messageToSend.Content);
 
             _mailPage.ConfirmSend();
+
+            bool result = !_mailPage.InvalidToWarning();
+            if (!result)
+                _mailPage.ConfirmInvalidToWarning();
+
+            return result;
         }
 
         public void CreateDraft(Message messageToDraft)

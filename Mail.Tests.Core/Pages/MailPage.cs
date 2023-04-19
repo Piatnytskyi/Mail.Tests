@@ -12,6 +12,9 @@ namespace Mail.Tests.Core.Pages
         private readonly By _newMailBy = By.XPath("//button[@aria-label='New mail']");
         private readonly By _sendBy = By.XPath("//button[@aria-label='Send']");
         private readonly By _saveDraftBy = By.Name("Save draft");
+        private readonly By _confirmInvalidMailBy = By.Id("removeButton");
+
+        private readonly By _invalidMailBy = By.Id("invalidIcon");
 
         private readonly By _toBy = By.XPath("//div[@aria-label='To']");
         private readonly By _subjectBy = By.XPath("//input[@aria-label='Add a subject']");
@@ -58,6 +61,25 @@ namespace Mail.Tests.Core.Pages
         public void ConfirmSend()
         {
             _webDriver.FindElement(_sendBy).Click();
+        }
+
+        public bool InvalidToWarning()
+        {
+            try
+            {
+                _webDriver.FindElement(_invalidMailBy);
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void ConfirmInvalidToWarning()
+        {
+            _webDriver.FindElement(_confirmInvalidMailBy).Click();
         }
 
         public void Select(string subject)
