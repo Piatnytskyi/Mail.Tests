@@ -23,13 +23,6 @@ namespace Mail.Tests.Business
             _mailPage.ConfirmSend();
         }
 
-        public bool IsMessageSent(Message sentMessage)
-        {
-            _mailPage.OpenSentItems();
-
-            return _mailPage.MessageExists(sentMessage.Subject);
-        }
-
         public void CreateDraft(Message messageToDraft)
         {
             _mailPage.OpenNewMail();
@@ -42,11 +35,49 @@ namespace Mail.Tests.Business
             _mailPage.SaveDraft();
         }
 
-        public bool IsDraftCreated(Message draftMessage)
+        public bool IsMessageInFolder(string folderName, Message message)
         {
-            _mailPage.OpenDrafts();
+            _mailPage.OpenFolder(folderName);
 
-            return _mailPage.MessageExists(draftMessage.Subject);
+            return _mailPage.MessageExists(message.Subject);
+        }
+
+        public bool IsMessageInFolder(string folderName, Message[] messages)
+        {
+            Thread.Sleep(3000);
+            _mailPage.OpenFolder(folderName);
+
+            return messages.All(m => _mailPage.MessageExists(m.Subject));
+        }
+
+        public void MoveToFolder(string fromFolderName, string toFolderName, Message message)
+        {
+            _mailPage.OpenFolder(fromFolderName);
+
+            _mailPage.Select(message.Subject);
+            _mailPage.OpenMoveToOptions();
+            if (_mailPage.FolderExists(toFolderName))
+                _mailPage.MoveToFolder(toFolderName);
+            else
+                _mailPage.MoveToNewFolder(toFolderName);
+        }
+
+        public void MoveToFolder(string fromFolderName, string toFolderName, Message[] messages)
+        {
+            _mailPage.OpenFolder(fromFolderName);
+
+            foreach (var message in messages)
+            {
+                _mailPage.Select(message.Subject);
+            }
+
+            _mailPage.OpenMoveToOptions();
+            if (_mailPage.FolderExists(toFolderName))
+            {
+                _mailPage.MoveToFolder(toFolderName);
+            }
+            else
+                _mailPage.MoveToNewFolder(toFolderName);
         }
     }
 }

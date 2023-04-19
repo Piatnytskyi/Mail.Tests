@@ -71,7 +71,7 @@ namespace Mail.Tests
             mail.CreateDraft(message);
 
             //Assert
-            Assert.True(mail.IsDraftCreated(message));
+            Assert.True(mail.IsMessageInFolder("Drafts", message));
         }
     }
 }

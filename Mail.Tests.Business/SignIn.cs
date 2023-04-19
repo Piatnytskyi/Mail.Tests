@@ -14,7 +14,7 @@ namespace Mail.Tests.Business
 
         public MailPage Login(User user)
         {
-            _signInPage.SetUserName(user.Login);
+            _signInPage.SetUserName(user.Email);
             _signInPage.ConfirmUserName();
             _signInPage.SetPassword(user.Password);
 
