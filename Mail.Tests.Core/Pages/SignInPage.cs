@@ -8,8 +8,8 @@ namespace Mail.Tests.Core.Pages
 
         private readonly By _usernameBy = By.Name("loginfmt");
         private readonly By _passwordBy = By.Name("passwd");
-        private readonly By _nextBy = By.XPath("//input[@id='idSIButton9' and @value='Next']");
-        private readonly By _signInBy = By.XPath("//input[@id='idSIButton9' and @value='Sign in']");
+        private readonly By _nextBy = By.XPath("//input[contains(@id, 'idSIButton') and @value='Next']");
+        private readonly By _signInBy = By.XPath("//input[contains(@id, 'idSIButton') and @value='Sign in']");
         private readonly By _noStaySignInBy = By.Id("idBtn_Back");
 
         public SignInPage(WebDriver webDriver)
