@@ -8,7 +8,7 @@
 
         public override string ToString()
         {
-            return Subject;
+            return $"{To} {Content}";
         }
     }
 }

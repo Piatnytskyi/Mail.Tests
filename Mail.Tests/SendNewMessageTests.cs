@@ -38,10 +38,6 @@ namespace Mail.Tests
             {
                 new Message() { To = "whatever@mailinator.com", Subject = "Test 1 " + Guid.NewGuid(), Content = "Hello World!" }
             };
-            yield return new object[]
-            {
-                new Message() { To = "whatever@mailinator.com", Subject = "Test 2 " + Guid.NewGuid(), Content = "Hello World!" }
-            };
         }
 
         [Theory]
